@@ -48,31 +48,33 @@ def delete_subject():
     data = load_data()
     if not data:
         print(Fore.RED + "No subjects available to delete!")
+        time.sleep(2)
         return
     
-    print(Fore.CYAN + "Available subjects:")
-    for subject in data.keys():
-        print(Fore.YELLOW + f"- {subject}")
-    
+    list_subjects()
     name = input(Fore.GREEN + "Enter subject name to delete: ")
     if name not in data:
         print(Fore.RED + "Subject not found!")
+        time.sleep(2)
         return
     
     del data[name]
     save_data(data)
     print(Fore.YELLOW + f"Subject '{name}' deleted successfully.")
+    time.sleep(2)
 
 def edit_sessions():
     data = load_data()
     if not data:
         print(Fore.RED + "No subjects available!")
+        time.sleep(2)
         return
     
     list_subjects()
     name = input(Fore.GREEN + "Enter subject name: ")
     if name not in data:
         print(Fore.RED + "Subject not found!")
+        time.sleep(2)
         return
     
     subject = data[name]
@@ -85,13 +87,16 @@ def edit_sessions():
         del subject["sessions"][index]
         save_data(data)
         print(Fore.YELLOW + "Session deleted successfully.")
+        time.sleep(2)
     else:
         print(Fore.RED + "Invalid index!")
+        time.sleep(2)
 
 def export_data():
     data = load_data()
     if not data:
         print(Fore.RED + "No data available to export!")
+        time.sleep(2)
         return
     
     filename = "study_data_export.csv"
@@ -102,17 +107,20 @@ def export_data():
             for session in details["sessions"]:
                 writer.writerow([subject, session["timestamp"], session["duration"]])
     print(Fore.GREEN + f"Data exported successfully to {filename}")
+    time.sleep(2)
 
 def load_subject():
     data = load_data()
     if not data:
         print(Fore.RED + "No subjects available!")
+        time.sleep(2)
         return
     
     list_subjects()
     name = input(Fore.GREEN + "Enter subject name: ")
     if name not in data:
         print(Fore.RED + "Subject not found!")
+        time.sleep(2)
         return
     
     print(Fore.CYAN + f"Loaded subject: {name}")
@@ -123,18 +131,21 @@ def set_goal():
     data = load_data()
     if not data:
         print(Fore.RED + "No subjects available to set a goal!")
+        time.sleep(2)
         return
     
     list_subjects()
     name = input(Fore.GREEN + "Enter subject name: ")
     if name not in data:
         print(Fore.RED + "Subject not found!")
+        time.sleep(2)
         return
     
     goal = int(input(Fore.GREEN + "Enter study goal in minutes: "))
     data[name]["goal"] = goal
     save_data(data)
     print(Fore.CYAN + f"Goal of {goal} minutes set for '{name}'.")
+    time.sleep(2)
 
 def main():
     while True:
