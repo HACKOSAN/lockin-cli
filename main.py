@@ -78,6 +78,11 @@ def edit_sessions():
         return
     
     subject = data[name]
+    if not subject["sessions"]:
+        print(Fore.RED + "No sessions available for this subject!")
+        time.sleep(2)
+        return
+    
     print(Fore.MAGENTA + "Sessions:")
     for i, session in enumerate(subject["sessions"]):
         print(Fore.LIGHTWHITE_EX + f"[{i}] {session['timestamp']} → {session['duration']} minutes")
@@ -109,6 +114,25 @@ def export_data():
     print(Fore.GREEN + f"Data exported successfully to {filename}")
     time.sleep(2)
 
+def start_timer(subject_name):
+    data = load_data()
+    print(Fore.GREEN + f"Timer started for {subject_name}. Press Ctrl+C to stop.")
+    start_time = time.time()
+    try:
+        while True:
+            elapsed = int(time.time() - start_time)
+            print(Fore.YELLOW + f"Elapsed Time: {elapsed} seconds", end="\r")
+            time.sleep(1)
+    except KeyboardInterrupt:
+        duration = int(time.time() - start_time) // 60
+        print(Fore.RED + "\nTimer stopped.")
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        data[subject_name]["sessions"].append({"timestamp": timestamp, "duration": duration})
+        data[subject_name]["total_time"] += duration
+        save_data(data)
+        print(Fore.CYAN + f"Session added: {duration} minutes")
+        time.sleep(2)
+
 def load_subject():
     data = load_data()
     if not data:
@@ -126,6 +150,7 @@ def load_subject():
     print(Fore.CYAN + f"Loaded subject: {name}")
     print(Fore.YELLOW + f"Total Study Time: {data[name]['total_time']} minutes")
     time.sleep(2)
+    start_timer(name)
 
 def set_goal():
     data = load_data()
